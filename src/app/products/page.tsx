@@ -7,25 +7,31 @@ import { Button } from '@/components/ui/button';
 function Page() {
     const [prodcuts, setProducts] = useState<Product[]>([]);
     const [error, setError] = useState("");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    const fetchProducts = async (searchTerm: string ="") => {
+        try {
+            const response = await fetch(`/api/products?search=${encodeURIComponent(searchTerm)}`) ;
+            if (!response.ok) {
+                throw new Error("couldn't fetch the products");
+            }
+            const data: Product[] = await response.json();
+            setProducts(data);
+        } catch(e) {
+            setError("error");
+            console.error(e);
+        }
+    };
+    
     useEffect(
         () => {
-            const fetchProducts = async () => {
-                try {
-                    const response = await fetch("/api/products") ;
-                    if (!response.ok) {
-                        throw new Error("couldn't fetch the products");
-                    }
-                    const data: Product[] = await response.json();
-                    setProducts(data);
-                } catch(e) {
-                    setError("error");
-                    console.error(e);
-                }
-            };
-
             fetchProducts();
         }
     , []);
+
+    const handleClick = (searchTerm: string = "") => {
+        fetchProducts(searchTerm);
+    };
 
   return (
       <div className="p-10 h-screen w-screen">
@@ -34,9 +40,10 @@ function Page() {
             <div className="w-full">
                 <input 
                     className="focus:border-green-400 h-full w-full border-2 pl-4 border-green-600 rounded-full"
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Search for a product"/>
             </div>
-            <Button className="bg-green-500 text-white rounded-full">Search</Button>
+            <Button className="bg-green-500 text-white rounded-full" onClick={() => handleClick(searchTerm)}>Search</Button>
         </div>
         {
             error === "" ?
