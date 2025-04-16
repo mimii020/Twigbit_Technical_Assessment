@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import ProductCard from './components/ProductCard'
 import { Product } from '@/models/Product';
+import { Button } from '@/components/ui/button';
 
 function Page() {
     const [prodcuts, setProducts] = useState<Product[]>([]);
@@ -29,6 +30,14 @@ function Page() {
   return (
       <div className="p-10 h-screen w-screen">
         <h1 className="text-bold text-4xl mb-3.5">Products</h1>
+        <div className="flex flex-row mb-5 gap-4">
+            <div className="w-full">
+                <input 
+                    className="focus:border-green-400 h-full w-full border-2 pl-4 border-green-600 rounded-full"
+                    placeholder="Search for a product"/>
+            </div>
+            <Button className="bg-green-500 text-white rounded-full">Search</Button>
+        </div>
         {
             error === "" ?
             (<div className="grid grid-cols-4 gap-4">
