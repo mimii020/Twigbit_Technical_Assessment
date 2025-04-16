@@ -1,12 +1,9 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import data from '../../data/data.json'
+import { Product } from '@/models/Product';
 
-interface Product {
-    name: string;
-    price: number;
-    description: string;
-}
+
 
 export default function handler(req: NextApiRequest, 
     res: NextApiResponse<Product[] | { error: string }>) {
